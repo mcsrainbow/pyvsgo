@@ -107,4 +107,3 @@ func main() {
 	}
 	logWithLevel(InfoLogger, "INFO", "更新校验成功")
 }
-
