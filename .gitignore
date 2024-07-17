@@ -1,0 +1,40 @@
+# macOS
+.DS_Store
+Icon
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+*.stackdump
+[Dd]esktop.ini
+
+# Editor
+*~
+*.swp
+*.swo
+*.swn
+
+# IDE
+.vscode/
+.idea/
+.ipynb_checkpoints/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Golang
+build/package/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+*.log
+
+# Temporary
+tmp/
