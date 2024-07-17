@@ -34,21 +34,22 @@ func parseOpts() Options {
 	flag.BoolVar(&opts.value, "V", false, "return actual value instead of 0 and 1")
 	flag.StringVar(&opts.payload, "p", "", "URL encoded http POST data")
 
-	exampleText := `
+	exampleTemplate := `
 examples:
-  %s -u idc1-web1/health
-  %s -u http://idc1-web1/health
-  %s -u http://idc1-web1/health -c ok
-  %s -u http://idc1-web1/health -c ok -V
-  %s -u http://idc1-web1/health -c ok -t 2 -V
-  %s -u http://idc1-web2:3000
-  %s -u http://idc1-web3/login.php?page=redirect_string -a username:password -V
-  %s -u https://idc2-web1.yourdomain.com -V
+  {0} -u idc1-web1/health
+  {0} -u http://idc1-web1/health
+  {0} -u http://idc1-web1/health -c ok
+  {0} -u http://idc1-web1/health -c ok -V
+  {0} -u http://idc1-web1/health -c ok -t 2 -V
+  {0} -u http://idc1-web2:3000
+  {0} -u http://idc1-web3/login.php?page=redirect_string -a username:password -V
+  {0} -u https://idc2-web1.yourdomain.com -V
 `
+	exampleText := strings.ReplaceAll(exampleTemplate, "{0}", os.Args[0])
 
 	flag.Usage = func() {
 		fmt.Printf("usage: %s [-h] -u url [-t timeout] [-c content] [-a auth] [-V] [-p payload]\n", os.Args[0])
-		fmt.Printf(exampleText, os.Args[0], os.Args[0], os.Args[0], os.Args[0], os.Args[0], os.Args[0], os.Args[0], os.Args[0])
+		fmt.Print(exampleText)
 		fmt.Println("\noptions:")
 		flag.PrintDefaults()
 	}
