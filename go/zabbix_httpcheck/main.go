@@ -1,3 +1,6 @@
+// Description: HTTP requests check for Zabbix
+// Author: Dong Guo
+
 package main
 
 import (
@@ -20,6 +23,7 @@ type Options struct {
 	timeoutSet bool
 }
 
+// parseOpts parses the command line options and returns an Options struct.
 func parseOpts() Options {
 	var opts Options
 
@@ -78,6 +82,7 @@ examples:
 	return opts
 }
 
+// getResults performs the HTTP request based on the provided options.
 func getResults(opts Options) int {
 	client := &http.Client{
 		Timeout: time.Duration(opts.timeout * float64(time.Second)),
@@ -153,8 +158,10 @@ func getResults(opts Options) int {
 	return 0
 }
 
+// main is the entry point of the program.
 func main() {
 	opts := parseOpts()
 	exitCode := getResults(opts)
 	os.Exit(exitCode)
 }
+
