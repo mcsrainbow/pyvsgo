@@ -35,21 +35,24 @@ func parseOpts() Options {
 	flag.StringVar(&opts.payload, "p", "", "URL encoded http POST data")
 
 	exampleTemplate := `
-examples:
-  {0} -u idc1-web1/health
-  {0} -u http://idc1-web1/health
-  {0} -u http://idc1-web1/health -c ok
-  {0} -u http://idc1-web1/health -c ok -V
-  {0} -u http://idc1-web1/health -c ok -t 2 -V
-  {0} -u http://idc1-web2:3000
-  {0} -u http://idc1-web3/login.php?page=redirect_string -a username:password -V
-  {0} -u https://idc2-web1.yourdomain.com -V
-`
-	exampleText := strings.ReplaceAll(exampleTemplate, "{0}", os.Args[0])
+	examples:
+	  {prog} -u idc1-web1/health
+	  {prog} -u http://idc1-web1/health
+	  {prog} -u http://idc1-web1/health -c ok
+	  {prog} -u http://idc1-web1/health -c ok -V
+	  {prog} -u http://idc1-web1/health -c ok -t 2 -V
+	  {prog} -u http://idc1-web2:3000
+	  {prog} -u http://idc1-web3/login.php?page=redirect_string -a username:password -V
+	  {prog} -u https://idc2-web1.yourdomain.com -V
+	`
+	exampleText := strings.ReplaceAll(exampleTemplate, "{prog}", os.Args[0])
+
+	// Remove leading tabs
+	trimmedExampleText := trimLeadingTabs(exampleText)
 
 	flag.Usage = func() {
 		fmt.Printf("usage: %s [-h] -u url [-t timeout] [-c content] [-a auth] [-V] [-p payload]\n", os.Args[0])
-		fmt.Print(exampleText)
+		fmt.Print(trimmedExampleText)
 		fmt.Println("\noptions:")
 		flag.PrintDefaults()
 	}
@@ -81,6 +84,15 @@ examples:
 
 	opts.timeoutSet = timeoutSet
 	return opts
+}
+
+// trimLeadingTabs removes leading tab characters from each line of the input string.
+func trimLeadingTabs(input string) string {
+	lines := strings.Split(input, "\n")
+	for i, line := range lines {
+		lines[i] = strings.TrimLeft(line, "\t")
+	}
+	return strings.Join(lines, "\n")
 }
 
 // getResults performs the HTTP request based on the provided options.
