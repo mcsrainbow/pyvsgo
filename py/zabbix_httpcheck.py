@@ -30,7 +30,7 @@ def parse_opts():
         '''.format(__file__)
         ))
 
-    parser.add_argument('-u', metavar='url', type=str, required=True, help='URL to GET or POST [default: / with http://]')
+    parser.add_argument('-u', metavar='url', type=str, required=True, help='URL to GET or POST [default: http://]')
     parser.add_argument('-t', metavar='timeout', type=float, help='seconds before connection times out [default: 10]')
     parser.add_argument('-c', metavar='content', type=str, help='string to expect in the content')
     parser.add_argument('-a', metavar='auth', type=str, help='username:password on sites with basic authentication')
