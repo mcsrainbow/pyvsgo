@@ -27,8 +27,8 @@ type Options struct {
 func parseOpts() Options {
 	var opts Options
 
-	flag.StringVar(&opts.url, "u", "", "URL to GET or POST [default: / with http://]")
-	flag.Float64Var(&opts.timeout, "t", 10, "seconds before connection times out [default: 10]")
+	flag.StringVar(&opts.url, "u", "", "URL to GET or POST (default / with http://)")
+	flag.Float64Var(&opts.timeout, "t", 10, "seconds before connection times out")
 	flag.StringVar(&opts.content, "c", "", "string to expect in the content")
 	flag.StringVar(&opts.auth, "a", "", "username:password on sites with basic authentication")
 	flag.BoolVar(&opts.value, "V", false, "return actual value instead of 0 and 1")
