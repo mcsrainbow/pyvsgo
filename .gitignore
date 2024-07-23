@@ -36,5 +36,15 @@ build/package/
 *.out
 *.log
 
-# Temporary
+# Node
+node_modules/
+dist/
+
+# Database
+*.sqlite3
+
+# Runtime
 tmp/
+*.log
+*.lock
+*.tmp
