@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-#-*- coding:utf-8 -*-
-
 # Description: HTTP requests check for Zabbix
 # Author: Dong Guo
 
@@ -36,6 +33,10 @@ def parse_opts():
     parser.add_argument('-a', metavar='auth', type=str, help='username:password on sites with basic authentication')
     parser.add_argument('-V', action="store_true", default=False, help='return actual value instead of 0 and 1')
     parser.add_argument('-p', metavar='payload', type=str, help='URL encoded http POST data')
+
+    if len(sys.argv) < 2:
+        parser.print_help()
+        sys.exit(2)
 
     args = parser.parse_args()
     return {'url': args.u, 'timeout': args.t, 'content': args.c, 'auth': args.a, 'value': args.V, 'payload': args.p}
@@ -100,14 +101,10 @@ def get_results(opts):
     return True
 
 def main():
-    if len(sys.argv) < 2:
-        os.system(__file__ + " -h")
-        return 2
-
     opts = parse_opts()
     get_results(opts)
-
     return 0
 
 if __name__ == '__main__':
     sys.exit(main())
+
