@@ -105,6 +105,7 @@ def get_results(opts):
 
     except Exception as e:
         print(f"Unexpected error: {str(e)}" if opts.get('value') else 1)
+        return 2
 
     return 0
 
