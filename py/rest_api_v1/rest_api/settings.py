@@ -53,13 +53,6 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'rest_api.urls'
 
-REST_FRAMEWORK = {
-    'DEFAULT_RENDERER_CLASSES': (
-        'rest_framework.renderers.JSONRenderer',
-        'rest_framework.renderers.BrowsableAPIRenderer',
-    ),
-}
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -78,7 +71,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'rest_api.wsgi.application'
 
-APPEND_SLASH = True
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases

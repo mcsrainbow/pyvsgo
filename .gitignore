@@ -42,6 +42,7 @@ dist/
 
 # Database
 *.sqlite3
+*.db
 
 # Runtime
 tmp/

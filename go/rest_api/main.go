@@ -1,31 +1,38 @@
 package main
 
 import (
+	"log"
+	"os"
+	"pyvsgo/go/rest_api/config"
+	"pyvsgo/go/rest_api/models"
+	"pyvsgo/go/rest_api/routes"
+
 	"github.com/gin-gonic/gin"
-	"gorm.io/driver/sqlite"
-	"gorm.io/gorm"
-	"pyvsgo/go/rest_api/book"
 )
 
 func main() {
-	// Initialize the database
-	db, err := gorm.Open(sqlite.Open("db.sqlite3"), &gorm.Config{})
-	if err != nil {
-		panic("failed to connect database")
+	db := config.ConnectDB()
+	defer func() {
+		if err := db.Close(); err != nil {
+			log.Fatalf("Error closing database: %v", err)
+		}
+	}()
+
+	if err := db.AutoMigrate(&models.Book{}).Error; err != nil {
+		log.Fatalf("Auto migration failed: %v", err)
 	}
 
-	// Migrate the schema
-	db.AutoMigrate(&book.Book{})
+	bookRepo := models.NewBookRepository(db)
+	router := gin.Default()
+	router.RedirectTrailingSlash = true
+	routes.BookRoutes(router, bookRepo)
 
-	// Initialize the book package with the database
-	book.Init(db)
-
-	r := gin.Default()
-
-	// API routes
-	r.GET("/api/show_books", book.ShowBooks)
-	r.POST("/api/add_book", book.AddBook)
-	r.DELETE("/api/delete_book/:id", book.DeleteBook)
-
-	r.Run(":9080") // Run on port 9080
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080" // 默认端口
+	}
+	log.Printf("Starting server on port %s", port)
+	if err := router.Run(":" + port); err != nil {
+		log.Fatalf("Server failed to start: %v", err)
+	}
 }

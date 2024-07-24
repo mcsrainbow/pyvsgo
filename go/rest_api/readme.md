@@ -8,23 +8,61 @@ mkdir rest_api/book
 
 cd rest_api
 vim main.go
-vim book/book.go
+vim config/config.go
+vim controllers/bookController.go
+vim models/book.go
+vim routes/bookRoutes.go
 
-go get -u github.com/gin-gonic/gin
-go get -u gorm.io/gorm
-go get -u gorm.io/driver/sqlite
+go mod tidy
 
 go run main.go
 ```
 
 ```bash
-curl -X POST http://127.0.0.1:9080/api/add_book -H "Content-Type: application/json" -d '{"book_name": "Nonviolent Communication: A Language of Life"}'
-curl -X POST http://127.0.0.1:9080/api/add_book -H "Content-Type: application/json" -d '{"book_name": "The Lean Startup"}'
-curl -X POST http://127.0.0.1:9080/api/add_book -H "Content-Type: application/json" -d '{"book_name": "How an Economy Grows and Why It Crashes"}'
-curl -X POST http://127.0.0.1:9080/api/add_book -H "Content-Type: application/json" -d '{"book_name": "The Willpower Instinct"}'
+# add books
+curl -X POST http://localhost:8080/api/books \
+     -H "Content-Type: application/json" \
+     -d '{"title": "The Go Programming Language", "author": "Alan A. A. Donovan, Brian Kernighan"}'
 
-curl -X GET http://127.0.0.1:9080/api/show_books
+curl -X POST http://localhost:8080/api/books \
+     -H "Content-Type: application/json" \
+     -d '{"title": "Rich Dad Poor Dad", "author": "Robert Kiyosaki, Sharon Lechter"}'
 
-curl -X DELETE http://127.0.0.1:9080/api/delete_book/1
-curl -X GET http://127.0.0.1:9080/api/show_books
+curl -X POST http://localhost:8080/api/books \
+     -H "Content-Type: application/json" \
+     -d '{"title": "How an Economy Grows and Why It Crashes", "author": "Peter Schiff"}'
+
+curl -X POST http://localhost:8080/api/books \
+     -H "Content-Type: application/json" \
+     -d '{"title": "Nonviolent Communication: A Language of Life", "author": "Marshall Rosenberg"}'
+
+curl -X POST http://localhost:8080/api/books \
+     -H "Content-Type: application/json" \
+     -d '{"title": "Influence: The Psychology of Persuasion", "author": "Robert Cialdini"}'
+
+curl -X POST http://localhost:8080/api/books \
+     -H "Content-Type: application/json" \
+     -d '{"title": "Educated: A Memoir", "author": "Tara Westover"}'
+
+curl -X POST http://localhost:8080/api/books \
+     -H "Content-Type: application/json" \
+     -d '{"title": "Pomodoro Technique Illustrated", "author": "Staffan Noteberg"}'
+
+curl -X POST http://localhost:8080/api/books \
+     -H "Content-Type: application/json" \
+     -d '{"title": "PEAK: Secrets from the New Science of Expertise", "author": "K. Anders Ericsson, Robert Pool"}'
+
+# get all books
+curl -X GET http://localhost:8080/api/books
+
+# get a book
+curl -X GET http://localhost:8080/api/books/1
+
+# update a book
+curl -X PUT http://localhost:8080/api/books/1 \
+     -H "Content-Type: application/json" \
+     -d '{"title": "The Go Programming Language, Updated Edition", "author": "Alan A. A. Donovan, Brian Kernighan"}'
+
+# delete a book
+curl -X DELETE http://localhost:8080/api/books/8
 ```
