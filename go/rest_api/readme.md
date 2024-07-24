@@ -4,7 +4,7 @@
 
 ```bash
 mkdir rest_api
-mkdir rest_api/book
+mkdir rest_api/{config,controllers,models,routes}
 
 cd rest_api
 vim main.go
