@@ -144,7 +144,7 @@ func getResults(opts Options) int {
 		} else {
 			fmt.Println(1)
 		}
-		return 1
+		return 2
 	}
 	defer resp.Body.Close()
 

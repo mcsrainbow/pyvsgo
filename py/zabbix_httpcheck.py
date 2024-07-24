@@ -41,7 +41,7 @@ def parse_opts():
 
     if args.a:
         if ':' not in args.a or len(args.a.split(':')) != 2:
-            print("Error: Invalid auth format. Expected username:password")
+            print("Invalid auth format. Expected username:password")
             sys.exit(2)
 
     return {'url': args.u, 'timeout': args.t, 'content': args.c, 'auth': args.a, 'value': args.V, 'payload': args.p}
