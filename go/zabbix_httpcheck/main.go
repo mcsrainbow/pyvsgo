@@ -177,4 +177,3 @@ func main() {
 	exitCode := getResults(opts)
 	os.Exit(exitCode)
 }
-
