@@ -13,17 +13,18 @@ import (
 	"time"
 )
 
+// Options 结构体定义了命令行参数
 type Options struct {
-	url        string
-	timeout    float64
-	content    string
-	auth       string
-	value      bool
-	payload    string
-	timeoutSet bool
+	url        string  // URL 地址
+	timeout    float64 // 超时时间，单位为秒
+	content    string  // 预期的内容字符串
+	auth       string  // 基本认证的用户名和密码
+	value      bool    // 返回实际值而不是 0 和 1
+	payload    string  // URL 编码的 HTTP POST 数据
+	timeoutSet bool    // 是否由用户设置了超时时间
 }
 
-// parseOpts parses the command line options and returns an Options struct.
+// parseOpts 解析命令行参数并返回一个 Options 结构体
 func parseOpts() Options {
 	var opts Options
 
@@ -34,6 +35,7 @@ func parseOpts() Options {
 	flag.BoolVar(&opts.value, "V", false, "return actual value instead of 0 and 1")
 	flag.StringVar(&opts.payload, "p", "", "URL encoded http POST data")
 
+	// 示例模板
 	exampleTemplate := `
 	examples:
 	  {prog} -u idc1-web1/health
@@ -45,11 +47,13 @@ func parseOpts() Options {
 	  {prog} -u http://idc1-web3/login.php?page=redirect_string -a username:password -V
 	  {prog} -u https://idc2-web1.yourdomain.com -V
 	`
+	// 替换示例模板中的占位符
 	exampleText := strings.ReplaceAll(exampleTemplate, "{prog}", os.Args[0])
 
-	// Remove leading tabs
+	// 去除前导制表符
 	trimmedExampleText := trimLeadingTabs(exampleText)
 
+	// 自定义用法信息
 	flag.Usage = func() {
 		fmt.Printf("usage: %s [-h] -u url [-t timeout] [-c content] [-a auth] [-V] [-p payload]\n", os.Args[0])
 		fmt.Print(trimmedExampleText)
@@ -57,7 +61,7 @@ func parseOpts() Options {
 		flag.PrintDefaults()
 	}
 
-	// Check if no arguments are provided
+	// 检查是否提供了命令行参数
 	if len(os.Args) < 2 {
 		flag.Usage()
 		os.Exit(2)
@@ -65,7 +69,7 @@ func parseOpts() Options {
 
 	flag.Parse()
 
-	// Check if timeout was set by the user
+	// 检查用户是否设置了超时时间
 	timeoutSet := false
 	flag.Visit(func(f *flag.Flag) {
 		if f.Name == "t" {
@@ -73,11 +77,13 @@ func parseOpts() Options {
 		}
 	})
 
+	// 检查是否提供了 URL
 	if opts.url == "" {
 		flag.Usage()
 		os.Exit(2)
 	}
 
+	// 如果 URL 没有 http:// 或 https:// 前缀，则添加 http://
 	if !strings.HasPrefix(opts.url, "http://") && !strings.HasPrefix(opts.url, "https://") {
 		opts.url = "http://" + opts.url
 	}
@@ -86,7 +92,7 @@ func parseOpts() Options {
 	return opts
 }
 
-// trimLeadingTabs removes leading tab characters from each line of the input string.
+// trimLeadingTabs 去除输入字符串中每行的前导制表符
 func trimLeadingTabs(input string) string {
 	lines := strings.Split(input, "\n")
 	for i, line := range lines {
@@ -95,7 +101,7 @@ func trimLeadingTabs(input string) string {
 	return strings.Join(lines, "\n")
 }
 
-// getResults performs the HTTP request based on the provided options.
+// getResults 根据提供的选项执行 HTTP 请求
 func getResults(opts Options) int {
 	client := &http.Client{
 		Timeout: time.Duration(opts.timeout * float64(time.Second)),
@@ -104,6 +110,7 @@ func getResults(opts Options) int {
 	var req *http.Request
 	var err error
 
+	// 创建 HTTP 请求
 	if opts.payload != "" {
 		req, err = http.NewRequest("POST", opts.url, strings.NewReader(opts.payload))
 	} else {
@@ -115,6 +122,7 @@ func getResults(opts Options) int {
 		return 2
 	}
 
+	// 设置基本认证
 	if opts.auth != "" {
 		authParts := strings.Split(opts.auth, ":")
 		if len(authParts) != 2 {
@@ -126,9 +134,10 @@ func getResults(opts Options) int {
 	}
 
 	startTime := time.Now()
-	resp, err := client.Do(req)
+	resp, err := client.Do(req) // 发送 HTTP 请求
 	responseSecs := time.Since(startTime).Seconds()
 
+	// 处理请求错误
 	if err != nil {
 		if opts.value {
 			fmt.Println(err.Error())
@@ -145,6 +154,7 @@ func getResults(opts Options) int {
 		return 2
 	}
 
+	// 根据选项打印结果
 	if opts.value {
 		if opts.content != "" {
 			fmt.Println(string(body))
@@ -171,7 +181,7 @@ func getResults(opts Options) int {
 	return 0
 }
 
-// main is the entry point of the program.
+// main 是程序的入口点
 func main() {
 	opts := parseOpts()
 	exitCode := getResults(opts)
