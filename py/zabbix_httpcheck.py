@@ -1,7 +1,6 @@
 # Description: HTTP requests check for Zabbix
 # Author: Dong Guo
 
-import os
 import sys
 import requests
 import time
@@ -39,6 +38,12 @@ def parse_opts():
         sys.exit(2)
 
     args = parser.parse_args()
+
+    if args.a:
+        if ':' not in args.a or len(args.a.split(':')) != 2:
+            print("Error: Invalid auth format. Expected username:password")
+            sys.exit(2)
+
     return {'url': args.u, 'timeout': args.t, 'content': args.c, 'auth': args.a, 'value': args.V, 'payload': args.p}
 
 def get_results(opts):
@@ -98,13 +103,14 @@ def get_results(opts):
     except requests.exceptions.ConnectionError:
         print("ConnectionError" if opts.get('value') else 1)
 
-    return True
+    except Exception as e:
+        print(f"Unexpected error: {str(e)}" if opts.get('value') else 1)
+
+    return 0
 
 def main():
     opts = parse_opts()
-    get_results(opts)
-    return 0
+    return get_results(opts)
 
 if __name__ == '__main__':
     sys.exit(main())
-
