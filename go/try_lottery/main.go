@@ -10,9 +10,10 @@ import (
 
 // Lottery struct to hold user balls, generated balls, and constants
 type Lottery struct {
-	userBalls []int
-	redBalls  []int
-	blueBall  int
+	userBalls  []int
+	redBalls   []int
+	blueBall   int
+	randSource *rand.Rand
 }
 
 // Constants for the maximum values and the count of balls
@@ -52,7 +53,7 @@ func (lottery *Lottery) ValidateUserBalls() {
 // GenerateLotteryBalls generates all lottery balls
 func (lottery *Lottery) GenerateLotteryBalls() []int {
 	// Generate a permutation of numbers from 1 to RedBallMax
-	numbers := rand.Perm(RedBallMax)
+	numbers := lottery.randSource.Perm(RedBallMax)
 	for i := range numbers {
 		numbers[i] += 1 // Ensure the numbers are in the range 1 to RedBallMax
 	}
@@ -60,7 +61,7 @@ func (lottery *Lottery) GenerateLotteryBalls() []int {
 	sort.Ints(lottery.redBalls)
 
 	// Generate blue ball
-	lottery.blueBall = rand.Intn(BlueBallMax) + 1
+	lottery.blueBall = lottery.randSource.Intn(BlueBallMax) + 1
 
 	return append(lottery.redBalls, lottery.blueBall)
 }
@@ -79,9 +80,12 @@ func CompareBalls(balls1, balls2 []int) bool {
 }
 
 func main() {
-	rand.Seed(time.Now().UnixNano())
+	randSource := rand.New(rand.NewSource(time.Now().UnixNano()))
 	userBalls := []int{1, 5, 10, 15, 16, 26, 9} // 用户选择的球
-	lottery := Lottery{userBalls: userBalls}
+	lottery := Lottery{
+		userBalls:  userBalls,
+		randSource: randSource,
+	}
 	lottery.ValidateUserBalls()
 
 	attempts := 1
