@@ -95,14 +95,14 @@ func main() {
 		fmt.Printf("%s: %v\n", key, value)
 	}
 
-	// Test delete functionality
+	// 测试删除功能
 	fmt.Println("\nDeleting key 'age':")
 	om.Delete("age")
 
 	fmt.Println("OrderedMap Keys after deletion:", om.Keys())
 	fmt.Println("OrderedMap Values after deletion:", om.Values())
 
-	// Try to delete a non-existent key
+	// 尝试删除不存在的键
 	fmt.Println("\nAttempting to delete non-existent key 'gender':")
 	result := om.Delete("gender")
 	fmt.Printf("Delete result: %v\n", result)
