@@ -39,6 +39,26 @@ func (om *OrderedMap) Keys() []string {
 	return om.keys
 }
 
+// Delete 删除键值对
+func (om *OrderedMap) Delete(key string) bool {
+	if _, exists := om.values[key]; !exists {
+		return false
+	}
+
+	// 从values映射中删除
+	delete(om.values, key)
+
+	// 从keys切片中删除
+	for i, k := range om.keys {
+		if k == key {
+			om.keys = append(om.keys[:i], om.keys[i+1:]...)
+			break
+		}
+	}
+
+	return true
+}
+
 // Values 获取所有值的切片
 func (om *OrderedMap) Values() []interface{} {
 	vals := []interface{}{}
@@ -74,4 +94,16 @@ func main() {
 		value, _ := om.Get(key)
 		fmt.Printf("%s: %v\n", key, value)
 	}
+
+	// Test delete functionality
+	fmt.Println("\nDeleting key 'age':")
+	om.Delete("age")
+
+	fmt.Println("OrderedMap Keys after deletion:", om.Keys())
+	fmt.Println("OrderedMap Values after deletion:", om.Values())
+
+	// Try to delete a non-existent key
+	fmt.Println("\nAttempting to delete non-existent key 'gender':")
+	result := om.Delete("gender")
+	fmt.Printf("Delete result: %v\n", result)
 }

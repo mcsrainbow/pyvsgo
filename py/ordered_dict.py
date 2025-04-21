@@ -24,3 +24,17 @@ print("All keys and values in ordered_dict:")
 for key, value in ordered_dict.items():
     print(f"{key}: {value}")
 
+# Deleting key 'age' using pop
+print("\nDeleting key 'age':")
+removed_value = ordered_dict.pop("age", None)
+print(f"Removed value: {removed_value}")
+
+print("ordered_dict Keys after deletion:", list(ordered_dict.keys()))
+print("ordered_dict Values after deletion:", list(ordered_dict.values()))
+
+# Attempting to delete a non-existent key with pop
+print("\nAttempting to delete non-existent key 'gender':")
+removed_value = ordered_dict.pop("gender", None)
+result = removed_value is not None  # True if key existed and was deleted
+print(f"Delete result: {result}")
+print(f"Removed value: {removed_value}")
