@@ -11,9 +11,7 @@ ehthumbs.db
 
 # Editor
 *~
-*.swp
-*.swo
-*.swn
+*.sw[a-z]
 
 # IDE
 .vscode/
@@ -22,8 +20,11 @@ ehthumbs.db
 
 # Python
 __pycache__/
-*.py[cod]
+*.py[codz]
 *$py.class
+.venv/
+.pytest_cache/
+.ruff_cache/
 
 # Golang
 build/package/
@@ -34,11 +35,6 @@ build/package/
 *.dylib
 *.test
 *.out
-*.log
-
-# Node
-node_modules/
-dist/
 
 # Database
 *.sqlite3
